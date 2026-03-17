@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Detector</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 h-screen flex items-center justify-center">
+
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+        <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Fake Image Detector</h1>
+        
+        <form id="uploadForm" class="space-y-4">
+            <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                <input type="file" id="imageInput" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" required>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition duration-300">
+                Analyze Image
+            </button>
+        </form>
+
+        <div id="loading" class="hidden mt-6 text-center">
+            <p class="text-blue-600 font-semibold animate-pulse">Scanning image with AI...</p>
+        </div>
+
+        <div id="resultArea" class="hidden mt-6 p-4 bg-gray-50 border border-gray-200 rounded-lg text-center">
+            <h2 class="text-lg font-bold text-gray-700 mb-2">Verdict:</h2>
+            <p id="finalVerdict" class="text-2xl font-black mb-1"></p>
+            <p id="confidenceScore" class="text-sm text-gray-500"></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const imageInput = document.getElementById('imageInput');
+            const loading = document.getElementById('loading');
+            const resultArea = document.getElementById('resultArea');
+            const finalVerdict = document.getElementById('finalVerdict');
+            const confidenceScore = document.getElementById('confidenceScore');
+
+            resultArea.classList.add('hidden');
+            loading.classList.remove('hidden');
+
+            const formData = new FormData();
+            formData.append('image', imageInput.files[0]);
+
+            try {
+                const response = await fetch('/api/v1/detect', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.error) {
+                    throw new Error(result.error);
+                }
+
+                    
+                const topPrediction = result[0]; 
+                
+                const confidencePercent = (topPrediction.score * 100).toFixed(2);
+                
+                if (topPrediction.label === 'artificial') {
+                    finalVerdict.textContent = "FAKE IMAGE";
+                    finalVerdict.className = "text-2xl font-black mb-1 text-red-600";
+                } else {
+                    finalVerdict.textContent = "REAL IMAGE";
+                    finalVerdict.className = "text-2xl font-black mb-1 text-green-600";
+                }
+
+                confidenceScore.textContent = `Confidence: ${confidencePercent}%`;
+                
+            } catch (error) {
+                finalVerdict.textContent = "Error";
+                finalVerdict.className = "text-2xl font-black mb-1 text-red-600";
+                confidenceScore.textContent = error.message;
+            } finally {
+                loading.classList.add('hidden');
+                resultArea.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
