@@ -15,6 +15,8 @@ This backend utilizes the **Google Gemini Multimodal API**, allowing the system 
 * **Frontend:** Vanilla JavaScript, HTML5, Tailwind CSS (Glassmorphism UI)
 * **Architecture:** RESTful API, Separation of Concerns (MVC pattern)
 
+## [Live hosted app](https://fake-image-detector-gemini.onrender.com/) ps wait 1-1.5 mins as the app takes time to boot up haiyaa !!
+
 ## ⚙️ Local Setup & Installation
 
 1. **Clone the repository:**
