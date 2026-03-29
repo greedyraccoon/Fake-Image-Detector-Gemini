@@ -43,8 +43,7 @@ public class ImageDetectionService {
 
             // 3. Give Gemini strict instructions so it formats the output for your frontend
             Map<String, Object> textPart = new HashMap<>();
-            textPart.put("text", "You are an expert AI image detector. Look closely at this image. If it has AI watermarks (like the Craiyon logo), weird fingers, or illogical geometry, it is AI. Respond ONLY with a raw JSON array. Calculate a real score between 0.50 and 0.99. If it is AI, you MUST use the exact lowercase label 'artificial'. If it is a real photograph, use 'human'. Use EXACTLY this format: [{\"label\": \"artificial\", \"score\": 0.98}]. Do NOT use markdown formatting. Reply with ONLY the JSON array.");
-            
+            textPart.put("text", "You are an expert AI image detector. Analyze this image for AI watermarks (like the Craiyon logo), weird fingers, or illogical geometry. Respond ONLY with a raw JSON array. Calculate a realistic score between 0.50 and 0.99. If it is AI, use the exact label 'artificial'. If it is a real photograph, use 'human'. Add a short, punchy 1-sentence 'reason' explaining exactly what gave it away. Use EXACTLY this format: [{\"label\": \"artificial\", \"score\": 0.98, \"reason\": \"The glowing neon lines are structurally illogical and there is a visible Craiyon watermark in the bottom right corner.\"}] Do NOT use markdown. Reply with ONLY the JSON array.");
 
             // 4. Package it all up into the final JSON structure Google expects
             Map<String, Object> content = new HashMap<>();
