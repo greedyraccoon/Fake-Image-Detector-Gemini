@@ -9,6 +9,8 @@ Traditional Hugging Face classification models rely strictly on pixel-level math
 
 This backend utilizes the **Google Gemini Multimodal API**, allowing the system to use actual logical reasoning (e.g., reading a "Craiyon" watermark, noticing 7 fingers on a hand, or identifying structurally impossible buildings) to determine authenticity.
 
+No data is stored within the site as Privacy comes first !
+
 ## 💻 Tech Stack
 * **Backend:** Java, Spring Boot, Maven
 * **AI Integration:** Google Gemini 2.5 Flash API (Multimodal)
